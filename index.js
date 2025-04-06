@@ -19,6 +19,7 @@ const TWITTER_CONFIG = {
   accessToken: process.env.TWITTER_ACCESS_TOKEN,
   accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
 };
+let fileName = "";
 
 if (!GEMINI_API_KEY) {
   console.error("Error: GEMINI_API_KEY is missing in your .env file.");
@@ -88,8 +89,10 @@ async function uploadHtmlToGemini(htmlContent, filename = "techmeme.html") {
       },
     });
 
+		fileName = uploadResult.name;
+
     console.log(
-      `File uploaded successfully. File Name: ${uploadResult.name}, URI: ${uploadResult.uri}`
+      `File uploaded successfully. File Name: ${fileName}, URI: ${uploadResult.uri}`
     );
 
     await fs.unlink(tempFilePath);
@@ -370,6 +373,23 @@ async function postNewsToTwitter(aiNews) {
   console.log("Finished posting thread.");
 }
 
+async function deleteFile(fileName) {
+	if (fileName === "") {
+		console.log("File not uploaded. Skipping deletion.");
+		return;
+	}
+
+	try {
+		console.log(`Deleting file ${fileName}...`);
+		await ai.files.delete({
+			name: fileName,
+		});
+		console.log(`File ${fileName} deleted successfully.`);
+	} catch (error) {
+		console.error("Error deleting file:", error.message);
+	}
+}
+
 async function deleteAllFiles() {
 	const pager = await ai.files.list({config: {pageSize: 10}});
 	let page = pager.page;
@@ -412,7 +432,9 @@ async function main() {
     console.error(error.message || error);
     console.error("------------------------------------");
     process.exit(1);
-  }
+  } finally {
+		await deleteFile(fileName);
+	}
 }
 
 main();
