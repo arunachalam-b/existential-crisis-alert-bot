@@ -295,6 +295,8 @@ async function postNewsToTwitter(aiNews) {
   console.log(`Intro tweet posted successfully! ID: ${createdTweet.id}`);
   previousTweetId = createdTweet.id;
 
+	await new Promise((resolve) => setTimeout(resolve, 2000));
+
   let hasError = false;
 
   for (let i = 0; i < aiNews.news_items.length; i++) {
@@ -331,7 +333,7 @@ async function postNewsToTwitter(aiNews) {
       previousTweetId = createdTweet.id;
 
       if (i < aiNews.news_items.length - 1) {
-        await new Promise((resolve) => setTimeout(resolve, 2000)); // 2-second delay
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       }
     } catch (error) {
       hasError = true;
@@ -348,6 +350,8 @@ async function postNewsToTwitter(aiNews) {
   }
 
   if (!hasError) {
+		await new Promise((resolve) => setTimeout(resolve, 2000));
+
     let tweetText = aiNews.outro;
     tweetText += `\n\n@AI_Techie_Arun`;
 
