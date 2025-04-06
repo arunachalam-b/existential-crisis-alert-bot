@@ -8,7 +8,7 @@ const {
   GoogleGenAI,
   createUserContent,
   createPartFromUri,
-  Type
+  Type,
 } = require("@google/genai");
 
 const TECHMEME_URL = "https://techmeme.com";
@@ -40,20 +40,16 @@ const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 const twitterClient = new TwitterApi(TWITTER_CONFIG);
 const twitterUserClient = twitterClient.readWrite;
 
-function translate (char)
-{
-    let diff;
-    if (/[A-Z]/.test (char))
-    {
-        diff = "𝗔".codePointAt (0) - "A".codePointAt (0);
-    }
-    else if (/[a-z]/.test(char))
-    {
-        diff = "𝗮".codePointAt (0) - "a".codePointAt (0);
-    } else if (/[0-9]/.test(char)) {
-        diff = "𝟎".codePointAt (0) - "0".codePointAt (0);
-    }
-    return String.fromCodePoint (char.codePointAt (0) + diff);
+function translate(char) {
+  let diff;
+  if (/[A-Z]/.test(char)) {
+    diff = "𝗔".codePointAt(0) - "A".codePointAt(0);
+  } else if (/[a-z]/.test(char)) {
+    diff = "𝗮".codePointAt(0) - "a".codePointAt(0);
+  } else if (/[0-9]/.test(char)) {
+    diff = "𝟎".codePointAt(0) - "0".codePointAt(0);
+  }
+  return String.fromCodePoint(char.codePointAt(0) + diff);
 }
 
 async function fetchHtml(url) {
@@ -93,7 +89,7 @@ async function uploadHtmlToGemini(htmlContent, filename = "techmeme.html") {
     });
 
     console.log(
-        `File uploaded successfully. File Name: ${uploadResult.name}, URI: ${uploadResult.uri}`
+      `File uploaded successfully. File Name: ${uploadResult.name}, URI: ${uploadResult.uri}`
     );
 
     await fs.unlink(tempFilePath);
@@ -248,7 +244,7 @@ async function extractAiNewsWithGemini(uploadedFile) {
         "Gemini response does not contain the expected structure."
       );
     }
-    
+
     aiNews.news_items.forEach((item, index) => {
       if (
         !item.title ||
@@ -272,9 +268,9 @@ async function extractAiNewsWithGemini(uploadedFile) {
     aiNews.news_items = newsItems;
     return aiNews;
   } catch (error) {
-    console.error('Error interacting with Gemini API:', error.message);
+    console.error("Error interacting with Gemini API:", error.message);
     if (error.response) {
-        console.error('Gemini Error Details:', error.response);
+      console.error("Gemini Error Details:", error.response);
     }
     throw error;
   }
@@ -304,7 +300,9 @@ async function postNewsToTwitter(aiNews) {
   for (let i = 0; i < aiNews.news_items.length; i++) {
     const item = aiNews.news_items[i];
     const hashtagString = item.hashtags.join(" ");
-    let tweetText = `${item.title.replace(/[A-Za-z0-9]/g, translate)}\n\n${item.short_description}\n\n${item.link}\n\n${hashtagString}`;
+    let tweetText = `${item.title.replace(/[A-Za-z0-9]/g, translate)}\n\n${
+      item.short_description
+    }\n\n${item.link}\n\n${hashtagString}`;
 
     if (aiNews.news_items.length > 1) {
       tweetText += `\n\n(${i + 1}/${aiNews.news_items.length})`;
