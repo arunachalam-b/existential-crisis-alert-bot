@@ -4,9 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@google/genai": "^0.7.0",
     "@google/generative-ai": "^0.24.0",
     "axios": "^1.8.4",
+    "cheerio": "^1.0.0",
     "dotenv": "^16.4.7",
+    "fs": "^0.0.1-security",
+    "os": "^0.1.2",
+    "path": "^0.12.7",
     "twitter-api-v2": "^1.22.0"
   }
 }
