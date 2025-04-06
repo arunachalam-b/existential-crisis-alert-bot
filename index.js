@@ -295,7 +295,7 @@ async function postNewsToTwitter(aiNews) {
   console.log(`Intro tweet posted successfully! ID: ${createdTweet.id}`);
   previousTweetId = createdTweet.id;
 
-	await new Promise((resolve) => setTimeout(resolve, 2000));
+  await new Promise((resolve) => setTimeout(resolve, 2000));
 
   let hasError = false;
 
@@ -350,7 +350,7 @@ async function postNewsToTwitter(aiNews) {
   }
 
   if (!hasError) {
-		await new Promise((resolve) => setTimeout(resolve, 2000));
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     let tweetText = aiNews.outro;
     tweetText += `\n\n@AI_Techie_Arun`;
@@ -368,6 +368,25 @@ async function postNewsToTwitter(aiNews) {
     previousTweetId = createdTweet.id;
   }
   console.log("Finished posting thread.");
+}
+
+async function deleteAllFiles() {
+	const pager = await ai.files.list({config: {pageSize: 10}});
+	let page = pager.page;
+	while (true) {
+	  for (const file of page) {
+	    console.log("Deleting - ", file.name);
+			await ai.files.delete({
+        name: file.name,
+      });
+	  }
+	  if (!pager.hasNextPage()) {
+	    break;
+	  }
+	  page = await pager.nextPage();
+	}
+
+  console.log("Deleted Files:", count);
 }
 
 async function main() {
@@ -397,3 +416,4 @@ async function main() {
 }
 
 main();
+// deleteAllFiles();
