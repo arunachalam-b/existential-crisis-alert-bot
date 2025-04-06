@@ -1,0 +1,12 @@
+{
+  "name": "existential-crisis-alert-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@google/generative-ai": "^0.24.0",
+    "axios": "^1.8.4",
+    "dotenv": "^16.4.7",
+    "twitter-api-v2": "^1.22.0"
+  }
+}
