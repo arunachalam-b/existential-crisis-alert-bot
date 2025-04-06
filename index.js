@@ -1,7 +1,6 @@
 // index.js
 require("dotenv").config(); // Load environment variables from .env file
 const axios = require("axios");
-const cheerio = require("cheerio");
 const fs = require("fs").promises; // Use promise-based fs
 const path = require("path");
 const os = require("os"); // To get temporary directory
@@ -97,12 +96,7 @@ async function fetchHtml(url) {
       throw new Error(`Failed to fetch HTML: Status code ${response.status}`);
     }
     console.log("HTML fetched successfully.");
-    // Load the HTML content into Cheerio
-    // const $ = cheerio.load(response.data);
-    // // Extract the body content
-    // const bodyContent = $('body').html();
-    // return bodyContent;
-    return response.data; // Return the full HTML content
+    return response.data;
   } catch (error) {
     console.error(`Error fetching HTML from ${url}:`, error.message);
     throw error; // Re-throw to be caught by the main function
