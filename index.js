@@ -3,16 +3,12 @@ const axios = require("axios");
 const fs = require("fs").promises;
 const path = require("path");
 const os = require("os");
-const { GoogleGenerativeAI, SchemaType } = require("@google/generative-ai");
 const { TwitterApi } = require("twitter-api-v2");
-const {
-  GoogleAIFileManager,
-  FileState,
-} = require("@google/generative-ai/server");
 const {
   GoogleGenAI,
   createUserContent,
   createPartFromUri,
+  Type
 } = require("@google/genai");
 
 const TECHMEME_URL = "https://techmeme.com";
@@ -40,19 +36,9 @@ if (
   process.exit(1);
 }
 
-const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 const twitterClient = new TwitterApi(TWITTER_CONFIG);
 const twitterUserClient = twitterClient.readWrite;
-
-const convertToBoldText = (text) => {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ", bold_chars = "𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭𝗮𝗯𝗰𝗱𝗲𝗳𝗴𝗵𝗶𝗷𝗸𝗹𝗺𝗻𝗼𝗽𝗾𝗿𝘀𝘁𝘂𝘃𝘄𝘅𝘆𝘇𝟬𝟭𝟮𝟯𝟰𝟱𝟲𝟳𝟴𝟵 ";
-    const boldText = text.split("").map(char => {
-        const index = chars.indexOf(char);
-        return index !== -1 ? bold_chars[index] : char;
-    }).join("");
-    return boldText;
-};
 
 function translate (char)
 {
@@ -172,13 +158,6 @@ async function extractAiNewsWithGemini(uploadedFile) {
             That’s a wrap on today’s AI buzz. Follow for more quick updates—minus the fluff. ⚡
         `;
 
-    const fileDataPart = {
-      fileData: {
-        mimeType: uploadedFile.mimeType,
-        fileUri: uploadedFile.uri,
-      },
-    };
-
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash",
       contents: [
@@ -190,38 +169,38 @@ async function extractAiNewsWithGemini(uploadedFile) {
       config: {
         responseMimeType: "application/json",
         responseSchema: {
-          type: SchemaType.OBJECT,
+          type: Type.OBJECT,
           properties: {
             intro: {
-              type: SchemaType.STRING,
+              type: Type.STRING,
               description: "Introduction to the post",
               nullable: false,
             },
             news_items: {
-              type: SchemaType.ARRAY,
+              type: Type.ARRAY,
               items: {
-                type: SchemaType.OBJECT,
+                type: Type.OBJECT,
                 properties: {
                   title: {
-                    type: SchemaType.STRING,
+                    type: Type.STRING,
                     description: "Title of the news",
                     nullable: false,
                   },
                   short_description: {
-                    type: SchemaType.STRING,
+                    type: Type.STRING,
                     description:
                       "Short description of the news not exceeding 80 characters",
                     nullable: false,
                   },
                   link: {
-                    type: SchemaType.STRING,
+                    type: Type.STRING,
                     description: "Link to the news article",
                     nullable: false,
                   },
                   hashtags: {
-                    type: SchemaType.ARRAY,
+                    type: Type.ARRAY,
                     items: {
-                      type: SchemaType.STRING,
+                      type: Type.STRING,
                       description: "Hashtags related to the news",
                       nullable: false,
                     },
@@ -233,7 +212,7 @@ async function extractAiNewsWithGemini(uploadedFile) {
               },
             },
             outro: {
-              type: SchemaType.STRING,
+              type: Type.STRING,
               description: "Conclusion of the post",
               nullable: false,
             },
@@ -244,7 +223,8 @@ async function extractAiNewsWithGemini(uploadedFile) {
 
     const text = response.text;
 
-    console.log("Gemini response received. ============ ", text);
+    console.log("Gemini response received", text);
+
     let cleanedText = text.trim();
     if (cleanedText.startsWith("```json")) {
       cleanedText = cleanedText.substring(7);
@@ -357,7 +337,6 @@ async function postNewsToTwitter(aiNews) {
       }
     } catch (error) {
       hasError = true;
-      console.log("Twitter Error =========== ", error);
       console.error(`Error posting tweet ${i + 1}:`, error.message || error);
       if (error.data) {
         console.error("Twitter API Error Details:", error.data);
@@ -399,8 +378,6 @@ async function main() {
     );
 
     const aiNews = await extractAiNewsWithGemini(uploadedFileMetadata);
-
-    console.log("AI News ============= ", aiNews);
 
     if (aiNews && aiNews.news_items.length > 0) {
       await postNewsToTwitter(aiNews);
