@@ -11,5 +11,8 @@
     "os": "^0.1.2",
     "path": "^0.12.7",
     "twitter-api-v2": "^1.22.0"
+  },
+  "scripts": {
+    "post": "node index.js"
   }
 }
