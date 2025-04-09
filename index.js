@@ -126,7 +126,7 @@ async function extractAiNewsWithGemini(uploadedFile) {
             1. The main headline text (title).
             2. A short description (not exceeding 150 characters) summarizing the news.
             3. The direct URL (link) associated with that headline on Techmeme.
-            4. A list of 1-3 relevant hashtags (e.g., #AI, #MachineLearning, #LLM, #GenAI, #Funding, #Research, #OpenAI).
+            4. A list of 1-3 relevant hashtags (e.g., #Google, #Gemini, #LLM, #Llama, #Funding, #Research, #OpenAI, #ChatGPT, #Claude, #Sonnet, #Microsoft, #Techcrunch, #Bloomberg). Don't include #AI or #ArtificialIntelligence hashtags. If possible, include one hashtag of the publisher. 
 
             Return the result ONLY as a JSON array of objects, where each object has the keys "title", "short_description", "link", and "hashtags" (which is an array of strings). Do not include any explanations around the JSON. However, you may include emojis. 
 
@@ -200,7 +200,7 @@ async function extractAiNewsWithGemini(uploadedFile) {
                     type: Type.ARRAY,
                     items: {
                       type: Type.STRING,
-                      description: "Hashtags related to the news",
+                      description: "Hashtags related to the news. Don't include #AI or #ArtificialIntelligence hashtags",
                       nullable: false,
                     },
                     minItems: 1,
