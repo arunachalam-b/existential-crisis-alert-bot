@@ -310,7 +310,7 @@ async function postNewsToTwitter(aiNews) {
     }\n\n${item.link}\n\n${hashtagString}`;
 
     if (aiNews.news_items.length > 1) {
-      tweetText += `\n\n(${i + 1}/${aiNews.news_items.length})`;
+      // tweetText += `\n\n(${i + 1}/${aiNews.news_items.length})`;
     }
 
     if (tweetText.length > 280) {
