@@ -124,7 +124,7 @@ async function extractAiNewsWithGemini(uploadedFile) {
 
             For each of the top 3 AI news items, provide:
             1. The main headline text (title).
-            2. A short description (not exceeding 80 characters) summarizing the news.
+            2. A short description (not exceeding 150 characters) summarizing the news.
             3. The direct URL (link) associated with that headline on Techmeme.
             4. A list of 1-3 relevant hashtags (e.g., #AI, #MachineLearning, #LLM, #GenAI, #Funding, #Research, #OpenAI).
 
@@ -188,7 +188,7 @@ async function extractAiNewsWithGemini(uploadedFile) {
                   short_description: {
                     type: Type.STRING,
                     description:
-                      "Short description of the news not exceeding 80 characters",
+                      "Short description of the news not exceeding 150 characters",
                     nullable: false,
                   },
                   link: {
