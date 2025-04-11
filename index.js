@@ -111,9 +111,9 @@ async function extractAiNewsWithGemini(uploadedFile) {
             Analyze the content of the provided HTML file (${uploadedFile.displayName}), which contains the Techmeme homepage. Identify the top 3 news headlines specifically related to Artificial Intelligence (AI), Machine Learning (ML), Large Language Models (LLMs), Generative AI, or significant AI company news (like OpenAI, Anthropic, Google AI, Meta AI, etc.).
 
             For each of the top 3 AI news items, provide:
-            1. The main headline text (title).
+            1. The main headline text (title) not exceeding 60 characters.
             2. A short description (not exceeding 120 characters) summarizing the news.
-            3. The direct URL (link) associated with that headline on Techmeme.
+            3. The direct URL (link) associated with that headline on Techmeme. Link to the news article source. 
             4. A list of 1-3 relevant hashtags (e.g., #Google, #Gemini, #LLM, #Llama, #Funding, #Research, #OpenAI, #ChatGPT, #Claude, #Sonnet, #Microsoft, #Techcrunch, #Bloomberg). Don't include #AI or #ArtificialIntelligence hashtags. If possible, include one hashtag of the publisher. 
 
             Return the result ONLY as a JSON array of objects, where each object has the keys "title", "short_description", "link", and "hashtags" (which is an array of strings). Do not include any explanations around the JSON. However, you may include emojis. 
@@ -146,7 +146,7 @@ async function extractAiNewsWithGemini(uploadedFile) {
         `;
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
+      model: "models/gemini-2.5-pro-exp-03-25",
       contents: [
         createUserContent([
           prompt,
@@ -170,7 +170,7 @@ async function extractAiNewsWithGemini(uploadedFile) {
                 properties: {
                   title: {
                     type: Type.STRING,
-                    description: "Title of the news",
+                    description: "Title of the news not exceeding 60 characters",
                     nullable: false,
                   },
                   short_description: {
