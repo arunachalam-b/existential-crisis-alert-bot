@@ -41,18 +41,6 @@ const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 const twitterClient = new TwitterApi(TWITTER_CONFIG);
 const twitterUserClient = twitterClient.readWrite;
 
-function translate(char) {
-  let diff;
-  if (/[A-Z]/.test(char)) {
-    diff = "𝗔".codePointAt(0) - "A".codePointAt(0);
-  } else if (/[a-z]/.test(char)) {
-    diff = "𝗮".codePointAt(0) - "a".codePointAt(0);
-  } else if (/[0-9]/.test(char)) {
-    diff = "𝟎".codePointAt(0) - "0".codePointAt(0);
-  }
-  return String.fromCodePoint(char.codePointAt(0) + diff);
-}
-
 async function fetchHtml(url) {
   console.log(`Fetching HTML from ${url}...`);
   try {
@@ -305,7 +293,7 @@ async function postNewsToTwitter(aiNews) {
   for (let i = 0; i < aiNews.news_items.length; i++) {
     const item = aiNews.news_items[i];
     const hashtagString = item.hashtags.join(" ");
-    let tweetText = `${item.title.replace(/[A-Za-z0-9]/g, translate)}\n\n${
+    let tweetText = `${item.title}\n\n${
       item.short_description
     }\n\n${item.link}\n\n${hashtagString}`;
 
