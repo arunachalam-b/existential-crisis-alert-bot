@@ -333,10 +333,10 @@ async function postNewsToTwitter(aiNews) {
         console.error("Twitter API Error Details:", error.data);
       }
 
-      if (i === 0) {
-        console.error("Aborting further posts due to error.");
-        break;
-      }
+      // if (i === 0) {
+      //   console.error("Aborting further posts due to error.");
+      //   break;
+      // }
     }
   }
 
