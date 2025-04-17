@@ -9,6 +9,7 @@ on:
 jobs:
   run-hello:
     runs-on: ubuntu-latest
+    environment: PROD
 
     steps:
       - name: Checkout repository
@@ -23,4 +24,7 @@ jobs:
         run: npm install
 
       - name: Run hello.js
+        env:
+          READ_TIMEOUT_SECRETS: ${{ secrets.READ_TIMEOUT_SECRETS || 'default_value' }}
+          READ_TIMEOUT_VARIABLE: ${{ secrets.READ_TIMEOUT_VARIABLE || 'default_value' }}
         run: node hello.js
