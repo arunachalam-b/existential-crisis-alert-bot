@@ -25,6 +25,6 @@ jobs:
 
       - name: Run hello.js
         env:
-          READ_TIMEOUT_SECRETS: ${{ secrets.READ_TIMEOUT_SECRETS || 'default_value' }}
-          READ_TIMEOUT_VARIABLE: ${{ secrets.READ_TIMEOUT_VARIABLE || 'default_value' }}
+          READ_TIMEOUT_SECRETS: ${{ secrets.READ_TIMEOUT_SECRETS }}
+          READ_TIMEOUT_VARIABLE: ${{ secrets.READ_TIMEOUT_VARIABLE }}
         run: node hello.js
