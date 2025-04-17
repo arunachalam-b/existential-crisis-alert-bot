@@ -401,9 +401,6 @@ async function main() {
   try {
     const html = await fetchHtml(TECHMEME_URL);
 
-    console.log("HTML ==== ", html);
-    return html;
-
     uploadedFileMetadata = await uploadHtmlToGemini(
       html,
       `techmeme-latest_${new Date().toISOString()}.html`
