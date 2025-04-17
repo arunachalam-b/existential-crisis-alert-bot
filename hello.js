@@ -8,8 +8,6 @@ const envs = [
 	"TWITTER_ACCESS_TOKEN_SECRET",
 ];
 
-console.log("All Envs ==== ", process.env);
-
 for (const env of envs) {
 	console.log("Environment Variable: ", env);
 	const secret = process.env[env];

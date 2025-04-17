@@ -25,6 +25,9 @@ jobs:
 
       - name: Run hello.js
         env:
-          READ_TIMEOUT_SECRETS: ${{ secrets.READ_TIMEOUT_SECRETS }}
-          READ_TIMEOUT_VARIABLE: ${{ secrets.READ_TIMEOUT_VARIABLE }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          TWITTER_API_KEY: ${{ secrets.TWITTER_API_KEY }}
+          TWITTER_API_SECRET: ${{ secrets.TWITTER_API_SECRET }}
+          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
         run: node hello.js
