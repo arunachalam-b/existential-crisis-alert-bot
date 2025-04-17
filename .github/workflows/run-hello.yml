@@ -4,6 +4,8 @@ on:
   schedule:
     - cron: '* * * * *'
 
+  workflow_dispatch:
+
 jobs:
   run-hello:
     runs-on: ubuntu-latest
