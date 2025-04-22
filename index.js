@@ -77,7 +77,7 @@ async function uploadHtmlToGemini(htmlContent, filename = "techmeme.html") {
       },
     });
 
-		fileName = uploadResult.name;
+    fileName = uploadResult.name;
 
     console.log(
       `File uploaded successfully. File Name: ${fileName}, URI: ${uploadResult.uri}`
@@ -170,7 +170,8 @@ async function extractAiNewsWithGemini(uploadedFile) {
                 properties: {
                   title: {
                     type: Type.STRING,
-                    description: "Title of the news not exceeding 60 characters",
+                    description:
+                      "Title of the news not exceeding 60 characters",
                     nullable: false,
                   },
                   short_description: {
@@ -188,7 +189,8 @@ async function extractAiNewsWithGemini(uploadedFile) {
                     type: Type.ARRAY,
                     items: {
                       type: Type.STRING,
-                      description: "Hashtags related to the news. Don't include #AI or #ArtificialIntelligence hashtags",
+                      description:
+                        "Hashtags related to the news. Don't include #AI or #ArtificialIntelligence hashtags",
                       nullable: false,
                     },
                     minItems: 1,
@@ -251,6 +253,13 @@ async function extractAiNewsWithGemini(uploadedFile) {
       if (item.link && item.link.startsWith("/")) {
         item.link = `https://techmeme.com${item.link}`;
       }
+      const hashTags = item.hashtags?.map((hashtag) => {
+        if (hashtag.startsWith("#")) {
+          return hashtag;
+        }
+        return `#${hashtag}`;
+      }) || [];
+      item.hashtags = hashTags;
     });
 
     console.log(`Extracted ${aiNews.length} AI news items.`);
@@ -293,9 +302,7 @@ async function postNewsToTwitter(aiNews) {
   for (let i = 0; i < aiNews.news_items.length; i++) {
     const item = aiNews.news_items[i];
     const hashtagString = item.hashtags.join(" ");
-    let tweetText = `${item.title}\n\n${
-      item.short_description
-    }\n\n${item.link}\n\n${hashtagString}`;
+    let tweetText = `${item.title}\n\n${item.short_description}\n\n${item.link}\n\n${hashtagString}`;
 
     if (aiNews.news_items.length > 1) {
       // tweetText += `\n\n(${i + 1}/${aiNews.news_items.length})`;
@@ -362,37 +369,37 @@ async function postNewsToTwitter(aiNews) {
 }
 
 async function deleteFile(fileName) {
-	if (fileName === "") {
-		console.log("File not uploaded. Skipping deletion.");
-		return;
-	}
+  if (fileName === "") {
+    console.log("File not uploaded. Skipping deletion.");
+    return;
+  }
 
-	try {
-		console.log(`Deleting file ${fileName}...`);
-		await ai.files.delete({
-			name: fileName,
-		});
-		console.log(`File ${fileName} deleted successfully.`);
-	} catch (error) {
-		console.error("Error deleting file:", error.message);
-	}
+  try {
+    console.log(`Deleting file ${fileName}...`);
+    await ai.files.delete({
+      name: fileName,
+    });
+    console.log(`File ${fileName} deleted successfully.`);
+  } catch (error) {
+    console.error("Error deleting file:", error.message);
+  }
 }
 
 async function deleteAllFiles() {
-	const pager = await ai.files.list({config: {pageSize: 10}});
-	let page = pager.page;
-	while (true) {
-	  for (const file of page) {
-	    console.log("Deleting - ", file.name);
-			await ai.files.delete({
+  const pager = await ai.files.list({ config: { pageSize: 10 } });
+  let page = pager.page;
+  while (true) {
+    for (const file of page) {
+      console.log("Deleting - ", file.name);
+      await ai.files.delete({
         name: file.name,
       });
-	  }
-	  if (!pager.hasNextPage()) {
-	    break;
-	  }
-	  page = await pager.nextPage();
-	}
+    }
+    if (!pager.hasNextPage()) {
+      break;
+    }
+    page = await pager.nextPage();
+  }
 
   console.log("Deleted Files:", count);
 }
@@ -421,8 +428,8 @@ async function main() {
     console.error("------------------------------------");
     process.exit(1);
   } finally {
-		await deleteFile(fileName);
-	}
+    await deleteFile(fileName);
+  }
 }
 
 main();
