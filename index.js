@@ -19,6 +19,7 @@ const TWITTER_CONFIG = {
   accessToken: process.env.TWITTER_ACCESS_TOKEN,
   accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
 };
+const TWEET_LIMIT = 3;
 let fileName = "";
 
 if (!GEMINI_API_KEY) {
@@ -108,9 +109,9 @@ async function extractAiNewsWithGemini(uploadedFile) {
   console.log("Sending HTML to Gemini for AI news extraction...");
   try {
     const prompt = `
-            Analyze the content of the provided HTML file (${uploadedFile.displayName}), which contains the Techmeme homepage. Identify the top 3 news headlines specifically related to Artificial Intelligence (AI), Machine Learning (ML), Large Language Models (LLMs), Generative AI, or significant AI company news (like OpenAI, Anthropic, Google AI, Meta AI, etc.).
+            Analyze the content of the provided HTML file (${uploadedFile.displayName}), which contains the Techmeme homepage. Identify the top ${TWEET_LIMIT} news headlines specifically related to Artificial Intelligence (AI), Machine Learning (ML), Large Language Models (LLMs), Generative AI, or significant AI company news (like OpenAI, Anthropic, Google AI, Meta AI, etc.).
 
-            For each of the top 3 AI news items, provide:
+            For each of the top ${TWEET_LIMIT} AI news items, provide:
             1. The main headline text (title) not exceeding 60 characters.
             2. A short description (not exceeding 120 characters) summarizing the news.
             3. The direct URL (link) associated with that headline on Techmeme. Link to the news article source. 
@@ -124,7 +125,7 @@ async function extractAiNewsWithGemini(uploadedFile) {
             Intro:
             From big price tags to free college perks, the AI world isn’t slowing down. Here are today’s top 3 stories you should know:
 
-            Top 3 AI News:
+            Top ${TWEET_LIMIT} AI News:
 
             1️⃣ Google's Gemini 2.5 Pro Comes with a Premium Price Tag 💰
             Google reveals pricing for Gemini 2.5 Pro—its most expensive model yet—at $1.25 per million input tokens and $10 per million output tokens.
@@ -263,8 +264,8 @@ async function extractAiNewsWithGemini(uploadedFile) {
     });
 
     console.log(`Extracted ${aiNews.length} AI news items.`);
-    const newsItems = aiNews.news_items;
-    newsItems.slice(0, 3);
+    let newsItems = aiNews.news_items;
+    newsItems = newsItems.slice(0, TWEET_LIMIT);
     aiNews.news_items = newsItems;
     return aiNews;
   } catch (error) {
