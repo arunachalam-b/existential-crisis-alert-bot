@@ -8,11 +8,14 @@
     "axios": "^1.8.4",
     "dotenv": "^16.4.7",
     "fs": "^0.0.1-security",
+    "image-downloader": "^4.3.0",
+    "jsdom": "^26.1.0",
     "os": "^0.1.2",
     "path": "^0.12.7",
     "twitter-api-v2": "^1.22.0"
   },
   "scripts": {
     "post": "node index.js"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
