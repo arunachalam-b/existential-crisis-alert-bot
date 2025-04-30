@@ -319,15 +319,15 @@ async function postNewsToTwitter(aiNews) {
   let previousTweetId = null;
 
   let tweetText = aiNews.intro;
-  // tweetText += `\n\n#AI #ArtificialIntelligence #MachineLearning #LLM #GenerativeAI #OpenAI #Anthropic #GoogleAI #MetaAI #Gemini #Techmeme`;
-  // let postOptions = { text: tweetText };
-  // const { data: createdTweet } = await twitterUserClient.v2.tweet(postOptions);
-  // console.log(`Intro tweet posted successfully! ID: ${createdTweet.id}`);
-  // previousTweetId = createdTweet.id;
+  tweetText += `\n\n#AI #ArtificialIntelligence #MachineLearning #LLM #GenerativeAI #OpenAI #Anthropic #GoogleAI #MetaAI #Gemini #Techmeme`;
+  let postOptions = { text: tweetText };
+  const { data: createdTweet } = await twitterUserClient.v2.tweet(postOptions);
+  console.log(`Intro tweet posted successfully! ID: ${createdTweet.id}`);
+  previousTweetId = createdTweet.id;
 
-  // await new Promise((resolve) => setTimeout(resolve, 5000));
+  await new Promise((resolve) => setTimeout(resolve, 5000));
 
-  // let hasError = false;
+  let hasError = false;
 
   for (let i = 0; i < aiNews.news_items.length; i++) {
     const item = aiNews.news_items[i];
@@ -342,7 +342,7 @@ async function postNewsToTwitter(aiNews) {
       if (imagePath) {
         const mediaUpload = await twitterUserClient.v1.uploadMedia(imagePath);
         mediaId = mediaUpload;
-        await fs.unlink(imagePath); // Clean up the downloaded image
+        await fs.unlink(imagePath);
       }
     }
 
@@ -368,11 +368,11 @@ async function postNewsToTwitter(aiNews) {
 
       console.log("Post options:", postOptions);
 
-      // const { data: createdTweet } = await twitterUserClient.v2.tweet(
-      //   postOptions
-      // );
-      // console.log(`Tweet ${i + 1} posted successfully! ID: ${createdTweet.id}`);
-      // previousTweetId = createdTweet.id;
+      const { data: createdTweet } = await twitterUserClient.v2.tweet(
+        postOptions
+      );
+      console.log(`Tweet ${i + 1} posted successfully! ID: ${createdTweet.id}`);
+      previousTweetId = createdTweet.id;
 
       if (i < aiNews.news_items.length - 1) {
         await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -386,24 +386,24 @@ async function postNewsToTwitter(aiNews) {
     }
   }
 
-  // if (!hasError) {
-  //   await new Promise((resolve) => setTimeout(resolve, 5000));
+  if (!hasError) {
+    await new Promise((resolve) => setTimeout(resolve, 5000));
 
-  //   let tweetText = aiNews.outro;
-  //   tweetText += `\n\n@AI_Techie_Arun`;
+    let tweetText = aiNews.outro;
+    tweetText += `\n\n@AI_Techie_Arun`;
 
-  //   postOptions = { text: tweetText };
+    postOptions = { text: tweetText };
 
-  //   if (previousTweetId) {
-  //     postOptions.reply = { in_reply_to_tweet_id: previousTweetId };
-  //   }
+    if (previousTweetId) {
+      postOptions.reply = { in_reply_to_tweet_id: previousTweetId };
+    }
 
-  //   const { data: createdTweet } = await twitterUserClient.v2.tweet(
-  //     postOptions
-  //   );
-  //   console.log(`Outro tweet posted successfully! ID: ${createdTweet.id}`);
-  //   previousTweetId = createdTweet.id;
-  // }
+    const { data: createdTweet } = await twitterUserClient.v2.tweet(
+      postOptions
+    );
+    console.log(`Outro tweet posted successfully! ID: ${createdTweet.id}`);
+    previousTweetId = createdTweet.id;
+  }
   console.log("Finished posting thread.");
 }
 
@@ -445,51 +445,14 @@ async function deleteAllFiles() {
 
 async function main() {
   try {
-    // const html = await fetchHtml(TECHMEME_URL);
+    const html = await fetchHtml(TECHMEME_URL);
 
-    // uploadedFileMetadata = await uploadHtmlToGemini(
-    //   html,
-    //   `techmeme-latest_${new Date().toISOString()}.html`
-    // );
+    uploadedFileMetadata = await uploadHtmlToGemini(
+      html,
+      `techmeme-latest_${new Date().toISOString()}.html`
+    );
 
-    // const aiNews = await extractAiNewsWithGemini(uploadedFileMetadata);
-
-    aiNews = {
-      "intro": "Catch up on the latest AI waves 🌊! From new shopping features in ChatGPT to groundbreaking models and crucial regulations, here are today's top AI headlines:",
-      "news_items": [
-        {
-          "hashtags": [
-            "#Deepfake",
-            "#Regulation",
-            "#WashingtonPost"
-          ],
-          "link": "https://www.washingtonpost.com/technology/2025/04/28/congress-deepfake-revenge-porn-law/",
-          "title": "US House Passes 'Take It Down Act' Targeting Deepfakes",
-          "short_description": "Bill criminalizes nonconsensual sexual images, including AI deepfakes, requiring platforms to remove them. Heads to Trump."
-        },
-        {
-          "hashtags": [
-            "#OpenAI",
-            "#ChatGPT",
-            "#Wired"
-          ],
-          "link": "https://www.wired.com/story/openai-adds-shopping-to-chatgpt/",
-          "title": "OpenAI Adds Shopping Features to ChatGPT Experience",
-          "short_description": "ChatGPT will show product recommendations with 'buy' buttons linking to merchants, even for logged-out users."
-        },
-        {
-          "hashtags": [
-            "#Alibaba",
-            "#Qwen3",
-            "#TechCrunch"
-          ],
-          "link": "https://techcrunch.com/2025/04/28/alibaba-unveils-qwen-3-a-family-of-hybrid-ai-reasoning-models/",
-          "title": "Alibaba Unveils Qwen3 Open-Weight Hybrid AI Models",
-          "short_description": "New family includes Qwen3-235B-A22B (22B active params), aiming to compete with leading models."
-        }
-      ],
-      "outro": "That's the AI scoop for today! 🤖 Stay tuned and follow for more updates shaping our tech future. ✨"
-    };
+    const aiNews = await extractAiNewsWithGemini(uploadedFileMetadata);
 
     if (aiNews && aiNews.news_items.length > 0) {
       await postNewsToTwitter(aiNews);
