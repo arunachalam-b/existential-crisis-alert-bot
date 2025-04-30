@@ -119,7 +119,7 @@ async function extractAiNewsWithGemini(uploadedFile) {
 
             Return the result ONLY as a JSON array of objects, where each object has the keys "title", "short_description", "link", and "hashtags" (which is an array of strings). Do not include any explanations around the JSON. However, you may include emojis. 
 
-            Also, give me a short content before these lines to start with and give me a short content asking the user to follow to receive more content at the end. 
+            Also, give me a short content before these lines to start with (an intro hook) and give me a short content asking the user to follow to receive more content at the end (outro hook). 
 
             Here's an example: 
             Intro:
