@@ -303,7 +303,7 @@ async function postNewsToTwitter(aiNews) {
   for (let i = 0; i < aiNews.news_items.length; i++) {
     const item = aiNews.news_items[i];
     const hashtagString = item.hashtags.join(" ");
-    let tweetText = `${item.title}\n\n${item.short_description}\n\n${hashtagString}\n\n${item.link}`;
+    let tweetText = `${item.title}\n\n${item.short_description}\n\n${hashtagString}`;
 
     if (aiNews.news_items.length > 1) {
       // tweetText += `\n\n(${i + 1}/${aiNews.news_items.length})`;
