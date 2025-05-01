@@ -113,7 +113,7 @@ async function extractAiNewsWithGemini(uploadedFile) {
 
             For each of the top ${TWEET_LIMIT} AI news items, provide:
             1. The main headline text (title) not exceeding 60 characters.
-            2. A short description (not exceeding 120 characters) summarizing the news.
+            2. A short description (not exceeding 150 characters) summarizing the news.
             3. The direct URL (link) associated with that headline on Techmeme. Link to the news article source. 
             4. A list of 1-3 relevant hashtags (e.g., #Google, #Gemini, #LLM, #Llama, #Funding, #Research, #OpenAI, #ChatGPT, #Claude, #Sonnet, #Microsoft, #Techcrunch, #Bloomberg). Don't include #AI or #ArtificialIntelligence hashtags. If possible, include one hashtag of the publisher. 
 
@@ -178,7 +178,7 @@ async function extractAiNewsWithGemini(uploadedFile) {
                   short_description: {
                     type: Type.STRING,
                     description:
-                      "Short description of the news not exceeding 120 characters",
+                      "Short description of the news not exceeding 150 characters",
                     nullable: false,
                   },
                   link: {
