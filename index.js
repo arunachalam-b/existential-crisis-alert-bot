@@ -289,14 +289,14 @@ async function postNewsToTwitter(aiNews) {
 
   let previousTweetId = null;
 
-  let tweetText = aiNews.intro;
-  tweetText += `\n\n#AI #ArtificialIntelligence #MachineLearning #LLM #GenerativeAI #OpenAI #Anthropic #GoogleAI #MetaAI #Gemini #Techmeme`;
-  let postOptions = { text: tweetText };
-  const { data: createdTweet } = await twitterUserClient.v2.tweet(postOptions);
-  console.log(`Intro tweet posted successfully! ID: ${createdTweet.id}`);
-  previousTweetId = createdTweet.id;
+  // let tweetText = aiNews.intro;
+  // tweetText += `\n\n#AI #ArtificialIntelligence #MachineLearning #LLM #GenerativeAI #OpenAI #Anthropic #GoogleAI #MetaAI #Gemini #Techmeme`;
+  // let postOptions = { text: tweetText };
+  // const { data: createdTweet } = await twitterUserClient.v2.tweet(postOptions);
+  // console.log(`Intro tweet posted successfully! ID: ${createdTweet.id}`);
+  // previousTweetId = createdTweet.id;
 
-  await new Promise((resolve) => setTimeout(resolve, 5000));
+  // await new Promise((resolve) => setTimeout(resolve, 5000));
 
   let hasError = false;
 
@@ -305,9 +305,9 @@ async function postNewsToTwitter(aiNews) {
     const hashtagString = item.hashtags.join(" ");
     let tweetText = `${item.title}\n\n${item.short_description}\n\n${hashtagString}`;
 
-    if (aiNews.news_items.length > 1) {
-      // tweetText += `\n\n(${i + 1}/${aiNews.news_items.length})`;
-    }
+    // if (aiNews.news_items.length > 1) {
+    //   // tweetText += `\n\n(${i + 1}/${aiNews.news_items.length})`;
+    // }
 
     if (tweetText.length > 280) {
       console.warn(
@@ -321,18 +321,20 @@ async function postNewsToTwitter(aiNews) {
       console.log(`Posting tweet ${i + 1}: ${item.title}`);
       const postOptions = { text: tweetText };
 
-      if (previousTweetId) {
-        postOptions.reply = { in_reply_to_tweet_id: previousTweetId };
-      }
+      // if (previousTweetId) {
+      //   postOptions.reply = { in_reply_to_tweet_id: previousTweetId };
+      // }
 
       const { data: createdTweet } = await twitterUserClient.v2.tweet(
         postOptions
       );
+
       console.log(`Tweet ${i + 1} posted successfully! ID: ${createdTweet.id}`);
-      previousTweetId = createdTweet.id;
+
+      // previousTweetId = createdTweet.id;
 
       if (i < aiNews.news_items.length - 1) {
-        await new Promise((resolve) => setTimeout(resolve, 5000));
+        await new Promise((resolve) => setTimeout(resolve, 30000));
       }
     } catch (error) {
       hasError = true;
@@ -348,24 +350,24 @@ async function postNewsToTwitter(aiNews) {
     }
   }
 
-  if (!hasError) {
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+  // if (!hasError) {
+  //   await new Promise((resolve) => setTimeout(resolve, 5000));
 
-    let tweetText = aiNews.outro;
-    tweetText += `\n\n@AI_Techie_Arun`;
+  //   let tweetText = aiNews.outro;
+  //   tweetText += `\n\n@AI_Techie_Arun`;
 
-    postOptions = { text: tweetText };
+  //   postOptions = { text: tweetText };
 
-    if (previousTweetId) {
-      postOptions.reply = { in_reply_to_tweet_id: previousTweetId };
-    }
+  //   if (previousTweetId) {
+  //     postOptions.reply = { in_reply_to_tweet_id: previousTweetId };
+  //   }
 
-    const { data: createdTweet } = await twitterUserClient.v2.tweet(
-      postOptions
-    );
-    console.log(`Outro tweet posted successfully! ID: ${createdTweet.id}`);
-    previousTweetId = createdTweet.id;
-  }
+  //   const { data: createdTweet } = await twitterUserClient.v2.tweet(
+  //     postOptions
+  //   );
+  //   console.log(`Outro tweet posted successfully! ID: ${createdTweet.id}`);
+  //   previousTweetId = createdTweet.id;
+  // }
   console.log("Finished posting thread.");
 }
 
