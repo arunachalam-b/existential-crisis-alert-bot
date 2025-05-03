@@ -352,7 +352,6 @@ async function postNewsToTwitter(aiNews) {
     await new Promise((resolve) => setTimeout(resolve, 5000));
 
     let tweetText = aiNews.outro;
-    tweetText += `\n\n@AI_Techie_Arun`;
 
     postOptions = { text: tweetText };
 
